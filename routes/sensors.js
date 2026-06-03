@@ -1,0 +1,22 @@
+import express from "express";
+import db from "../db.js";
+
+const router = express.Router();
+
+router.get("/", async (req, res) => {
+  const result = await db.query("SELECT * FROM sensors ORDER BY id DESC LIMIT 20");
+  res.json(result.rows);
+});
+
+router.post("/", async (req, res) => {
+  const { zone, moisture, temperature } = req.body;
+
+  await db.query(
+    "INSERT INTO sensors (zone, moisture, temperature) VALUES ($1, $2, $3)",
+    [zone, moisture, temperature]
+  );
+
+  res.json({ status: "OK" });
+});
+
+export default router;
