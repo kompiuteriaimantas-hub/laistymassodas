@@ -4,16 +4,18 @@ import db from "../db.js";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  const result = await db.query("SELECT * FROM sensors ORDER BY id DESC LIMIT 20");
+  const result = await db.query(
+    "SELECT * FROM sensors ORDER BY id DESC LIMIT 20"
+  );
   res.json(result.rows);
 });
 
 router.post("/", async (req, res) => {
-  const { zone, moisture, temperature } = req.body;
+  const { zone, moisture, temperature, pressure } = req.body;
 
   await db.query(
-    "INSERT INTO sensors (zone, moisture, temperature) VALUES ($1, $2, $3)",
-    [zone, moisture, temperature]
+    "INSERT INTO sensors (zone, moisture, temperature, pressure) VALUES ($1, $2, $3, $4)",
+    [zone, moisture, temperature, pressure]
   );
 
   res.json({ status: "OK" });
