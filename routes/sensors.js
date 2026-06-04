@@ -13,6 +13,8 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   const { zone, moisture, temperature, pressure } = req.body;
 
+  console.log("Gauti duomenys:", req.body); // DEBUG
+
   await db.query(
     "INSERT INTO sensors (zone, moisture, temperature, pressure, time) VALUES ($1, $2, $3, $4, NOW())",
     [zone, moisture, temperature, pressure]
