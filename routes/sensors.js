@@ -14,7 +14,7 @@ router.post("/", async (req, res) => {
   const { zone, moisture, temperature, pressure } = req.body;
 
   await db.query(
-    "INSERT INTO sensors (zone, moisture, temperature, pressure) VALUES ($1, $2, $3, $4)",
+    "INSERT INTO sensors (zone, moisture, temperature, pressure, time) VALUES ($1, $2, $3, $4, NOW())",
     [zone, moisture, temperature, pressure]
   );
 

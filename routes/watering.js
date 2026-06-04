@@ -1,22 +1,23 @@
 import express from "express";
+import fetch from "node-fetch";
 import db from "../db.js";
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
-  const result = await db.query("SELECT * FROM watering_log ORDER BY id DESC LIMIT 50");
-  res.json(result.rows);
-});
-
 router.post("/", async (req, res) => {
-  const { zone, action, duration_seconds } = req.body;
+  const { action } = req.body;
 
-  await db.query(
-    "INSERT INTO watering_log (zone, action, duration_seconds) VALUES ($1, $2, $3)",
-    [zone, action, duration_seconds]
-  );
+  const result = await db.query("SELECT esp_ip FROM system WHERE id = 1");
+  const ESP_IP = result.rows[0].esp_ip;
 
-  res.json({ status: "OK" });
+  try {
+    const espRes = await fetch(`http://${ESP_IP}/pump?state=${action}`);
+    const text = await espRes.text();
+
+    res.json({ status: action === "on" ? "ON" : "OFF" });
+  } catch (err) {
+    res.status(500).json({ error: "ESP nepasiekiamas", ip: ESP_IP });
+  }
 });
 
 export default router;
