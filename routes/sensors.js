@@ -3,11 +3,11 @@ import db from "../db.js";
 
 const router = express.Router();
 
-// GET – grąžina paskutinius 20 įrašų (su wifi)
+// GET – grąžina paskutinius 20 įrašų (su wifi + bytes)
 router.get("/", async (req, res) => {
   try {
     const result = await db.query(
-      "SELECT id, zone, moisture, temperature, pressure, wifi, time FROM sensors ORDER BY id DESC LIMIT 20"
+      "SELECT id, zone, moisture, temperature, pressure, wifi, bytes, time FROM sensors ORDER BY id DESC LIMIT 20"
     );
     res.json(result.rows);
   } catch (err) {
@@ -16,14 +16,14 @@ router.get("/", async (req, res) => {
   }
 });
 
-// POST – priima duomenis iš ESP (su wifi)
+// POST – priima duomenis iš ESP (su wifi + bytes)
 router.post("/", async (req, res) => {
   try {
-    const { zone, moisture, temperature, pressure, wifi } = req.body;
+    const { zone, moisture, temperature, pressure, wifi, bytes } = req.body;
 
     await db.query(
-      "INSERT INTO sensors (zone, moisture, temperature, pressure, wifi, time) VALUES ($1, $2, $3, $4, $5, NOW())",
-      [zone, moisture, temperature, pressure, wifi]
+      "INSERT INTO sensors (zone, moisture, temperature, pressure, wifi, bytes, time) VALUES ($1, $2, $3, $4, $5, $6, NOW())",
+      [zone, moisture, temperature, pressure, wifi, bytes]
     );
 
     res.json({ status: "OK" });
