@@ -19,7 +19,14 @@ router.get("/", async (req, res) => {
 // POST – priima duomenis iš ESP (su wifi + bytes)
 router.post("/", async (req, res) => {
   try {
-    const { zone, moisture, temperature, pressure, wifi, bytes } = req.body;
+    const zone = req.body.zone || 1;
+const moisture = req.body.moisture ?? null;
+const temperature = req.body.temperature ?? null;
+const pressure = req.body.pressure ?? null;
+const wifi = req.body.wifi ?? null;
+const bytes = req.body.bytes ?? null;
+const heartbeat = req.body.heartbeat ?? null;
+
 
     await db.query(
       "INSERT INTO sensors (zone, moisture, temperature, pressure, wifi, bytes, time) VALUES ($1, $2, $3, $4, $5, $6, NOW())",
