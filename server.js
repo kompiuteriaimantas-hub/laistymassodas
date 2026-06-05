@@ -10,6 +10,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use("/api/watering/command", wateringCommand);
+app.use(express.static("public"));
+
 
 app.use("/api/sensors", sensors);
 app.use("/api/schedules", schedules);
