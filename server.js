@@ -10,7 +10,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// STATIC FAILAI – VISADA PIRMI
+// STATIC FAILAI – ROOT APLANKAS
 app.use(express.static("."));
 
 // API ROUTES
