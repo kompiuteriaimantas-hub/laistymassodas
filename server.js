@@ -4,10 +4,12 @@ import cors from "cors";
 import sensors from "./routes/sensors.js";
 import schedules from "./routes/schedules.js";
 import watering from "./routes/watering.js";
+import wateringCommand from "./routes/wateringCommand.js";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use("/api/watering/command", wateringCommand);
 
 app.use("/api/sensors", sensors);
 app.use("/api/schedules", schedules);
