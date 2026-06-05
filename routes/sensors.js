@@ -3,6 +3,16 @@ import db from "../db.js";
 
 const router = express.Router();
 
+router.delete("/reset", async (req, res) => {
+  try {
+    await db.clear(); // ištrina visą sensors lentelę
+    res.json({ status: "OK", message: "Data reset" });
+  } catch (err) {
+    res.status(500).json({ status: "ERROR", error: err });
+  }
+});
+
+
 // GET – grąžina paskutinius 20 įrašų
 router.get("/", async (req, res) => {
   try {
