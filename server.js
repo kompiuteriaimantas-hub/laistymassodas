@@ -10,14 +10,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// STATIC FAILAI TURI BŪTI PRIEŠ API ROUTES
-app.use(express.static("public"));
+// STATIC FAILAI – PRIVALO BŪTI PIRMI
+app.use(express.static("."));
 
 // API ROUTES
-app.use("/api/watering/command", wateringCommand);
 app.use("/api/sensors", sensors);
 app.use("/api/schedules", schedules);
 app.use("/api/watering", watering);
+app.use("/api/watering/command", wateringCommand);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log("API veikia ant porto:", port));
