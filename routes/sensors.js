@@ -2,6 +2,18 @@ import express from "express";
 import db from "../db.js";
 
 const router = express.Router();
+router.get("/all", async (req, res) => {
+  try {
+    const result = await db.query(
+      "SELECT id, zone, moisture, temperature, pressure, wifi, bytes, time FROM sensors ORDER BY id DESC"
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error("Klaida GET /api/sensors/all:", err);
+    res.status(500).json({ error: "Serverio klaida" });
+  }
+});
+
 
 router.delete("/reset", async (req, res) => {
   try {
