@@ -10,7 +10,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// STATIC FAILAI – PRIVALO BŪTI PIRMI
+// STATIC FAILAI – VISADA PIRMI
 app.use(express.static("."));
 
 // API ROUTES
