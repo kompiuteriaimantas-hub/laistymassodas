@@ -1,3 +1,11 @@
+// gaunam IP iš register-esp
+router.post("/register-esp", (req, res) => {
+  espIP = req.body.ip;
+  console.log("ESP registered:", espIP);
+  res.json({ status: "OK" });
+});
+
+
 import express from "express";
 import axios from "axios";
 
