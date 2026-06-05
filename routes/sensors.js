@@ -3,31 +3,7 @@ import db from "../db.js";
 
 const router = express.Router();
 
-// VISI įrašai
-router.get("/all", async (req, res) => {
-  try {
-    const result = await db.query(
-      "SELECT id, zone, moisture, temperature, pressure, wifi, bytes, time FROM sensors ORDER BY id DESC"
-    );
-    res.json(result.rows);
-  } catch (err) {
-    console.error("Klaida GET /api/sensors/all:", err);
-    res.status(500).json({ error: "Serverio klaida" });
-  }
-});
-
-// RESET
-router.delete("/reset", async (req, res) => {
-  try {
-    await db.query("DELETE FROM sensors");
-    res.json({ status: "OK", message: "Data reset" });
-  } catch (err) {
-    console.error("Klaida DELETE /api/sensors/reset:", err);
-    res.status(500).json({ status: "ERROR", error: err });
-  }
-});
-
-// Paskutiniai 20
+// Paskutiniai 20 įrašų
 router.get("/", async (req, res) => {
   try {
     const result = await db.query(
@@ -36,6 +12,19 @@ router.get("/", async (req, res) => {
     res.json(result.rows);
   } catch (err) {
     console.error("Klaida GET /api/sensors:", err);
+    res.status(500).json({ error: "Serverio klaida" });
+  }
+});
+
+// VISI įrašai (grafikams)
+router.get("/all", async (req, res) => {
+  try {
+    const result = await db.query(
+      "SELECT id, zone, moisture, temperature, pressure, wifi, bytes, time FROM sensors ORDER BY id DESC"
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error("Klaida GET /api/sensors/all:", err);
     res.status(500).json({ error: "Serverio klaida" });
   }
 });
