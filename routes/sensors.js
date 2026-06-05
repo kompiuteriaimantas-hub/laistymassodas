@@ -2,6 +2,8 @@ import express from "express";
 import db from "../db.js";
 
 const router = express.Router();
+
+// VISI įrašai
 router.get("/all", async (req, res) => {
   try {
     const result = await db.query(
@@ -14,18 +16,18 @@ router.get("/all", async (req, res) => {
   }
 });
 
-
+// RESET
 router.delete("/reset", async (req, res) => {
   try {
-    await db.clear(); // ištrina visą sensors lentelę
+    await db.query("DELETE FROM sensors");
     res.json({ status: "OK", message: "Data reset" });
   } catch (err) {
+    console.error("Klaida DELETE /api/sensors/reset:", err);
     res.status(500).json({ status: "ERROR", error: err });
   }
 });
 
-
-// GET – grąžina paskutinius 20 įrašų
+// Paskutiniai 20
 router.get("/", async (req, res) => {
   try {
     const result = await db.query(
@@ -38,10 +40,9 @@ router.get("/", async (req, res) => {
   }
 });
 
-// POST – priima duomenis iš ESP (sensoriai + heartbeat)
+// POST iš ESP
 router.post("/", async (req, res) => {
   try {
-    // Leidžiame NULL reikšmes, kad heartbeat veiktų
     const zone = req.body.zone || 1;
     const moisture = req.body.moisture ?? null;
     const temperature = req.body.temperature ?? null;
@@ -49,7 +50,6 @@ router.post("/", async (req, res) => {
     const wifi = req.body.wifi ?? null;
     const bytes = req.body.bytes ?? null;
 
-    // Įrašome į DB (time = DEFAULT NOW())
     await db.query(
       "INSERT INTO sensors (zone, moisture, temperature, pressure, wifi, bytes) VALUES ($1, $2, $3, $4, $5, $6)",
       [zone, moisture, temperature, pressure, wifi, bytes]
